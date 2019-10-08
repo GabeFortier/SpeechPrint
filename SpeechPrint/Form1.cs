@@ -7,7 +7,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.Speech.Recognition;
 using Seagull.BarTender.Print;
-
 using System.IO;
 using System.Linq;
 
@@ -16,20 +15,39 @@ namespace SpeechPrint
      
     public partial class Form1 : Form
     {
-        
-            
+
+        public string labelsPath;
         public Form1()
         {
             InitializeComponent();
+            button1.Enabled = false;
+        }
+
+        public void button2_Click(object sender, EventArgs e)
+        {
+            //Setting the folder for which we look for documents
+            folderBrowserDialog2.ShowDialog();
+            labelsPath = folderBrowserDialog2.SelectedPath;
+            if (labelsPath != null)
+            {
+                //if a folder is selected enable the alk button
+                button1.Enabled = true;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             Engine btEngine = new Engine();
-           
+           //starting BarTender print engine, Should move this probably to more optimal position
             btEngine.Start();
-            string[] labelFiles = Directory.GetFiles("C:\\Users\\gfortier\\OneDrive - Seagull Scientific, Inc\\Documents\\BarTender\\BarTender Documents");
+
+           //add all files from the chosen directory | looking for a way to oass agrument on files grabbed to only get .btw
+            string[] labelFiles = Directory.GetFiles(labelsPath);
+
+           //Will be list of .btw files full path that match the speech
             var selectedLabels = new List<string>();
+
+            //create the speech recognition engine
             using (SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine(
                  new System.Globalization.CultureInfo("en-US"))) {
                      recognizer.LoadGrammar(new DictationGrammar());
@@ -40,23 +58,27 @@ namespace SpeechPrint
 
                      RecognitionResult recorded = recognizer.Recognize();
 
+                
                      if (recorded != null) {
                          MessageBox.Show(recorded.Text);
+
                          //This is to count how many documents contain the speech recorded
                          int count = 0;
                          string oneDocument = "";
                          foreach (string x in labelFiles) {
-                             if (x.Remove(0,93).ToLower().Contains(recorded.Text.ToLower()))
+                             if (x.Remove(0, labelsPath.Length + 1).ToLower().Contains(recorded.Text.ToLower()) && x.Contains(".btw"))
                              {
-                                 MessageBox.Show(x.Remove(0,93));
+                                 MessageBox.Show(x.Remove(0, labelsPath.Length + 1));
                                  count++;
                                  //string printFile = String.Format("C:\\Users\\gfortier\\OneDrive - Seagull Scientific, Inc\\Documents\\BarTender\\BarTender Documents\\{0}.btw", recorded.Text.ToLower());
                                  string printFile = x;
-                                 comboBox1.Items.Add(printFile.Remove(0,93));
+
+                                 //add found .btw to the dropdown
+                                 comboBox1.Items.Add(printFile.Remove(0,labelsPath.Length + 1));
+                                 //
                                  selectedLabels.Add(x);
                                  oneDocument += x;
-                                 //LabelFormatDocument labelFile = btEngine.Documents.Open(@printFile);
-                                 //Result result = labelFile.Print();
+
                          }
                          
                          }
@@ -77,22 +99,23 @@ namespace SpeechPrint
             
         }
 
-        public void button2_Click(object sender, EventArgs e)
-        {
-            
 
-        }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string path = "C:\\Users\\gfortier\\OneDrive - Seagull Scientific, Inc\\Documents\\BarTender\\BarTender Documents\\";
+            
             
             Engine btEngine = new Engine();
             btEngine.Start();
-            LabelFormatDocument label = btEngine.Documents.Open(@path + this.comboBox1.GetItemText(this.comboBox1.SelectedItem));
+            LabelFormatDocument label = btEngine.Documents.Open(@labelsPath + this.comboBox1.GetItemText(this.comboBox1.SelectedItem));
             label.PrintSetup.RecordRange = "1";
             label.PrintSetup.PrinterName = "Zebra 2746e";
             label.Print();
+        }
+
+        private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
+        {
+
         }
     }
 }
