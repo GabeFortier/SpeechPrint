@@ -17,10 +17,15 @@ namespace SpeechPrint
     {
 
         public string labelsPath;
+        public string printerName;
         public Form1()
         {
             InitializeComponent();
             button1.Enabled = false;
+            foreach (string printer in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
+            {
+                comboBox2.Items.Add(printer);
+            }
         }
 
         public void button2_Click(object sender, EventArgs e)
@@ -70,12 +75,11 @@ namespace SpeechPrint
                              {
                                  MessageBox.Show(x.Remove(0, labelsPath.Length + 1));
                                  count++;
-                                 //string printFile = String.Format("C:\\Users\\gfortier\\OneDrive - Seagull Scientific, Inc\\Documents\\BarTender\\BarTender Documents\\{0}.btw", recorded.Text.ToLower());
                                  string printFile = x;
 
                                  //add found .btw to the dropdown
                                  comboBox1.Items.Add(printFile.Remove(0,labelsPath.Length + 1));
-                                 //
+                                 //add full path to list
                                  selectedLabels.Add(x);
                                  oneDocument += x;
 
@@ -84,7 +88,7 @@ namespace SpeechPrint
                          }
                          if (count == 1) {
                              LabelFormatDocument Label = btEngine.Documents.Open(@oneDocument);
-                             Label.PrintSetup.PrinterName = "Zebra 2746e";
+                             Label.PrintSetup.PrinterName = printerName;
                              Label.PrintSetup.RecordRange = "1";
                              Label.Print();
                          }
@@ -103,17 +107,28 @@ namespace SpeechPrint
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            //This will print anything in the list of added documents
+            //Items added if multiple documents match speech
             
             Engine btEngine = new Engine();
             btEngine.Start();
-            LabelFormatDocument label = btEngine.Documents.Open(@labelsPath + this.comboBox1.GetItemText(this.comboBox1.SelectedItem));
+            LabelFormatDocument label = btEngine.Documents.Open(@labelsPath + "\\" + this.comboBox1.GetItemText(this.comboBox1.SelectedItem));
             label.PrintSetup.RecordRange = "1";
-            label.PrintSetup.PrinterName = "Zebra 2746e";
+            label.PrintSetup.PrinterName = printerName;
             label.Print();
         }
 
         private void folderBrowserDialog1_HelpRequest(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            printerName = this.comboBox2.GetItemText(this.comboBox2.SelectedItem);
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

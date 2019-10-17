@@ -7,3 +7,7 @@ C:\Users\gfortier\onedrive - seagull scientific, inc\documents\visual studio 201
 C:\Users\gfortier\onedrive - seagull scientific, inc\documents\visual studio 2010\Projects\SpeechPrint\SpeechPrint\obj\x86\Debug\SpeechPrint.pdb
 C:\Users\gfortier\onedrive - seagull scientific, inc\documents\visual studio 2010\Projects\SpeechPrint\SpeechPrint\bin\Debug\SpeechPrint.exe.config
 C:\Users\gfortier\onedrive - seagull scientific, inc\documents\visual studio 2010\Projects\SpeechPrint\SpeechPrint\obj\x86\Debug\SpeechPrint.csprojResolveAssemblyReference.cache
+C:\Users\gfortier\onedrive - seagull scientific, inc\documents\visual studio 2010\Projects\SpeechPrint\SpeechPrint\bin\Debug\SpeechPrint.exe.manifest
+C:\Users\gfortier\onedrive - seagull scientific, inc\documents\visual studio 2010\Projects\SpeechPrint\SpeechPrint\bin\Debug\SpeechPrint.application
+C:\Users\gfortier\onedrive - seagull scientific, inc\documents\visual studio 2010\Projects\SpeechPrint\SpeechPrint\obj\x86\Debug\SpeechPrint.exe.manifest
+C:\Users\gfortier\onedrive - seagull scientific, inc\documents\visual studio 2010\Projects\SpeechPrint\SpeechPrint\obj\x86\Debug\SpeechPrint.application
